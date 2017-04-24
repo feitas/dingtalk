@@ -25,10 +25,19 @@
             <field name="model">hr.employee</field>
             <field name="inherit_id" ref="hr.view_employee_form" />
             <field name="arch" type="xml">
-                <field name="department_id" position="before">
-                    <field name="userid" />
-                    <field name="deviceId" />
-                </field>
+                <xpath expr="//page[@name='public']" position="after">
+                    <page string="钉钉">
+                        <group>
+                            <group>
+                                <field name="userid" />
+                                <field name="isAdmin" />
+                            </group>
+                            <group>
+                                <field name="deviceId" />
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
             </field>
         </record>
         

@@ -47,19 +47,34 @@ class DingDepartment(models.Model):
     @api.multi
     def dingtalk_update_department(self):
         """创建或者更新部门"""
-        _logger.info(self)
+        token = self.env['ir.values'].sudo().get_default('dingtalk.config.settings', 'dingtalk_accessToken')
+        if not token:
+            return
         
-
         for record in self:
-            token = self.env['ir.values'].sudo().get_default('dingtalk.config.settings', 'dingtalk_accessToken')
-            if not token:
-                return
-            if record.ding_id:
-                pass
-            else:
+            # 不允许无父部门
+            if not record.parent_id or not record.parent_id.ding_id:
+                continue
 
-                if not record.parent_id or not record.parent_id.ding_id:
-                    continue
+            if record.ding_id:
+                param = {
+                    "name": record.name,
+                    "parentid": record.parent_id.ding_id,
+                    "deptHiding": record.dt_deptHiding
+                }
+
+                url = "https://oapi.dingtalk.com/department/update?access_token={0}".format(token)
+                data = json.dumps(param, ensure_ascii=False).encode("utf-8")
+                req = urllib2.Request(url, data)
+                req.add_header("Content-Type", "application/json")
+                response = urllib2.urlopen(req).read()
+                result = json.loads(response.decode("utf-8"))
+
+                _logger.info(result)
+                if result.get('errcode') == 0 and result.get('errmsg') in ['ok','updated']:
+                    _logger.info("department updated!")
+
+            else:
 
                 param = {
                     "name": record.name,
@@ -81,7 +96,7 @@ class DingDepartment(models.Model):
 
     @api.multi
     def dingtalk_get_deptuser_detail(self):
-        """获取部门成员详情"""
+        """获取部门成员详情， GET"""
         token = self.env['ir.values'].sudo().get_default('dingtalk.config.settings', 'dingtalk_accessToken')
         if not token:
             return
@@ -91,12 +106,6 @@ class DingDepartment(models.Model):
                 continue
 
             url = "https://oapi.dingtalk.com/user/list?access_token={0}&department_id={1}".format(token, record.ding_id)
-            param = {
-                "access_token": token,
-                "department_id": record.ding_id,
-                "offset": 0,
-                "size": 100
-            }
 
             has_more = True
 
@@ -109,7 +118,16 @@ class DingDepartment(models.Model):
 
                 userlist = result['userlist']
                 for user in userlist:
-                    pass
+                    employee = self.env['hr.employee'].search([('name', '=', user['name'])])
+                    if len(employee) == 0:
+                        _createvalue = {
+                            "name": user['name'],
+                            "userid": user['userid'],
+                            "isAdmin": user['isAdmin']
+                        }
+
+                        self.env['hr.employee'].create(_createvalue)
+
 
 
 
@@ -123,6 +141,52 @@ class DingEmployee(models.Model):
     isHide = fields.Boolean("隐藏")
     isLeader = fields.Boolean("是Leader")
 
+
+    @api.multi
+    def dingtalk_create_employee(self):
+        """创建成员， POST"""
+
+        token = self.env['ir.values'].sudo().get_default('dingtalk.config.settings', 'dingtalk_accessToken')
+        if not token:
+            return
+
+        for record in self:
+            if not record.userid and record.mobile_phone and record.department_id and record.department_id.ding_id:
+                param = {
+                    "name": record.name,
+                    "department": [record.department_id.ding_id],
+                    "mobile": record.mobile_phone
+                }
+
+
+                url = "https://oapi.dingtalk.com/user/create?access_token={0}".format(token)
+                data = json.dumps(param, ensure_ascii=False).encode("utf-8")
+                req = urllib2.Request(url, data)
+                req.add_header("Content-Type", "application/json")
+                response = urllib2.urlopen(req).read()
+                result = json.loads(response.decode("utf-8"))
+
+                _logger.info(result)
+                if result.get('errcode') == 0 and result.get('errmsg') in ['ok','created']:
+                    record.userid = result['userid']
+
+            elif record.userid and record.name:
+                param = {
+                    "name": record.name,
+                    "userid": record.userid,
+                }
+
+
+                url = "https://oapi.dingtalk.com/user/update?access_token={0}".format(token)
+                data = json.dumps(param, ensure_ascii=False).encode("utf-8")
+                req = urllib2.Request(url, data)
+                req.add_header("Content-Type", "application/json")
+                response = urllib2.urlopen(req).read()
+                result = json.loads(response.decode("utf-8"))
+
+                _logger.info(result)
+                if result.get('errcode') == 0 and result.get('errmsg') in ['ok','updated']:
+                    _logger.info("user updated!")
 
 
 
