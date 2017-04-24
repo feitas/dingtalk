@@ -28,7 +28,6 @@
                 <field name="department_id" position="before">
                     <field name="userid" />
                     <field name="deviceId" />
-                    <field name="ash_type" />
                 </field>
             </field>
         </record>
