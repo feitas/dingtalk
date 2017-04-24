@@ -1,0 +1,44 @@
+<openerp>
+    <data>
+        
+        <!-- actions opening views on models -->
+        <record model="ir.actions.act_window" id="dingtalk.action_account">
+          <field name="name">dingtalk account</field>
+          <field name="res_model">dingtalk.account</field>
+          <field name="view_mode">tree,form</field>
+        </record>
+      
+        <!--微应用动作-->
+        <record model="ir.actions.act_window" id="action_dingtalk_app">
+            <field name="name">微应用</field>
+            <field name="res_model">dingtalk.app</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+    <!-- Top menu item -->
+        <menuitem name="钉钉" id="dingtalk.menu_root"
+            web_icon="dingtalk,static/description/icon.png"/>
+
+    <!-- menu categories -->
+        <menuitem name="管理" id="dingtalk.menu_1" parent="dingtalk.menu_root"/>
+
+        <menuitem name="配置" id="dingtalk.menu_2" parent="dingtalk.menu_root"/>
+
+    <!-- actions -->
+
+        <menuitem name="职位" id="dingtalk.menu_dingtalk_job" parent="dingtalk.menu_1"
+                  action="hr.action_hr_job" sequence="10"/>
+
+
+
+        <!--<menuitem name="企业会话" id="menu_server_company_chat" parent="dingtalk.menu_1"-->
+                  <!--action="action_server_company_chat" />-->
+
+
+        <!--<menuitem name="账号" id="dingtalk.menu_dingtalk_account" parent="dingtalk.menu_2"
+                  action="dingtalk.action_account"/>-->
+        <menuitem name="微应用" id="menu_dingtalk_app" parent="dingtalk.menu_2"
+                  action="action_dingtalk_app" sequence="40"/>
+        
+    </data>
+</openerp>

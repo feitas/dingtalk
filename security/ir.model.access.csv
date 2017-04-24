@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ash_dingtalk_ash_dingtalk,ash_dingtalk.ash_dingtalk,model_ash_dingtalk_ash_dingtalk,,1,0,0,0
+access_dingtalk_account,access_dingtalk_account,model_dingtalk_account,,1,0,0,0
+access_dingtalk_app,access_dingtalk_app,model_dingtalk_app,,1,0,0,0

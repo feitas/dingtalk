@@ -1,0 +1,17 @@
+<odoo>
+	<data>
+
+		<record id="view_dingtalk_log_tree" model="ir.ui.view">
+			<field name="name">view.dingtalk.log.tree</field>
+			<field name="model">dingtalk.log</field>
+		    <field name="arch" type="xml">
+		    	<tree>
+		    		<field name="name" />
+		    		<field name="errmsg" />
+		    		<field name="create_date" />
+		    	</tree>
+		    </field>
+		</record>
+
+	</data>
+</odoo>

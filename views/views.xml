@@ -1,0 +1,65 @@
+<openerp>
+    <data>
+    <!-- 钉钉账号Tree视图-->
+        <record model="ir.ui.view" id="view_dingtalk_account_tree">
+            <field name="name">dingtalk account</field>
+            <field name="model">dingtalk.account</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="corpid"/>
+                </tree>
+            </field>
+        </record>
+        <!--钉钉账号Form视图-->
+        <record model="ir.ui.view" id="view_dingtalk_account_form">
+            <field name="name">dingtalk account</field>
+            <field name="model">dingtalk.account</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="btn_department" type="object" string="部门"/>
+                            <button name="btn_department_userlist" type="object" string="成员"/>
+                            <button name="btn_enterprise_chat" type="object" string="企业会话"/>
+                        </div>
+                        <group>
+                            <field name="name"/>
+                            <field name="corpid"/>
+                            <field name="corpsecret"/>
+                            <field name="access_token"/>
+                            <field name="jsapi_ticket"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_dingtalk_app_search">
+            <field name="name">dingtalk app search</field>
+            <field name="model">dingtalk.app</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="agent_id"/>
+                    <field name="send_enterprise_message"/>
+                </search>
+            </field>
+        </record>
+        <!--微应用List视图-->
+        <record model="ir.ui.view" id="view_dingtalk_app_tree">
+            <field name="name">dingtalk app</field>
+            <field name="model">dingtalk.app</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="agent_id"/>
+                    <field name="send_enterprise_message"/>
+                </tree>
+            </field>
+        </record>
+
+    
+
+  </data>
+</openerp>

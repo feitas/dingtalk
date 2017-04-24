@@ -1,0 +1,24 @@
+<odoo>
+	<data>
+
+
+<!-- 获取部门详情 -->
+		<record id="action_dingtalk_get_department_detail" model="ir.actions.server">
+            <field name="name">获取部门详情</field>
+            <field name="model_id" ref="model_hr_department"/>
+            <field name="state">code</field>
+            <field name="code">
+if record:
+    action = object.dingtalk_get_department_details()
+            </field>
+        </record>
+
+        <record id="ir_dingtalk_get_department_detail" model="ir.values">
+            <field eval="'client_action_multi'" name="key2"/>
+            <field eval="'hr.department'" name="model"/>
+            <field name="name">获取部门详情</field>
+            <field eval="'ir.actions.server,%d'%action_dingtalk_get_department_detail" name="value"/>
+        </record>
+
+	</data>
+</odoo>
